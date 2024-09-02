@@ -4,30 +4,36 @@ import { parseUnits } from "@ethersproject/units";
 import ethers from "ethers";
 import JSBI from "jsbi";
 
-const chainId = 1; // 61
+const isETH = false;
+
+const chainId = isETH ? 1 : 61;
 
 const alphaRouter = new AlphaRouter({
-  chainId, // 61
+  chainId,
   provider: new ethers.providers.JsonRpcProvider(
-    "https://ethereum-rpc.publicnode.com" // https://etc.rivet.link
+    isETH ? "https://ethereum-rpc.publicnode.com" : "https://etc.rivet.link"
   ),
 });
 
 const tokenIn = new Token(
-  chainId, // 16
-  "0x514910771af9ca656af840dff83e8264ecf986ca", // 0xDE093684c796204224BC081f937aa059D903c52a
-  18, // 6
-  "LINK", // USC
-  "LINK" // USC
+  chainId,
+  isETH
+    ? "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" // USDC
+    : "0xDE093684c796204224BC081f937aa059D903c52a", // USC
+  6,
+  "TKNIN",
+  "TKNIN"
 );
 
 // Add the output token (e.g., WETH)
 const tokenOut = new Token(
-  chainId, // 16
-  "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", // 0x1953cab0E5bFa6D4a9BaD6E05fD46C1CC6527a5a
+  chainId,
+  isETH
+    ? "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2" // WETH
+    : "0x1953cab0E5bFa6D4a9BaD6E05fD46C1CC6527a5a", // WETC
   18,
-  "WETH", // WETC
-  "Wrapped Ether"
+  "TKNOUT",
+  "TKNOUT"
 );
 
 function parseAmount(value, currency) {
@@ -83,5 +89,5 @@ async function main() {
     }
   );
 
-  console.log('-==-=--==-=-', swap);
+  console.log("-==-=--==-=-", swap);
 }
