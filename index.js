@@ -4,27 +4,29 @@ import { parseUnits } from "@ethersproject/units";
 import ethers from "ethers";
 import JSBI from "jsbi";
 
+const chainId = 1; // 61
+
 const alphaRouter = new AlphaRouter({
-  chainId: 1,
+  chainId, // 61
   provider: new ethers.providers.JsonRpcProvider(
-    "https://ethereum-rpc.publicnode.com"
+    "https://ethereum-rpc.publicnode.com" // https://etc.rivet.link
   ),
 });
 
 const tokenIn = new Token(
-  1,
-  "0x514910771af9ca656af840dff83e8264ecf986ca",
-  18,
-  "LINK",
-  "LINK"
+  chainId, // 16
+  "0x514910771af9ca656af840dff83e8264ecf986ca", // 0xDE093684c796204224BC081f937aa059D903c52a
+  18, // 6
+  "LINK", // USC
+  "LINK" // USC
 );
 
 // Add the output token (e.g., WETH)
 const tokenOut = new Token(
-  1,
-  "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+  chainId, // 16
+  "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", // 0x1953cab0E5bFa6D4a9BaD6E05fD46C1CC6527a5a
   18,
-  "WETH",
+  "WETH", // WETC
   "Wrapped Ether"
 );
 
@@ -33,7 +35,7 @@ function parseAmount(value, currency) {
   return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(typedValueParsed));
 }
 
-const amount = parseAmount("100", tokenIn);
+const amount = parseAmount("1", tokenIn);
 
 const routingConfig = {
   v2PoolSelection: {
