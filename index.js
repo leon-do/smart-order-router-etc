@@ -4,45 +4,37 @@ import { parseUnits } from "@ethersproject/units";
 import ethers from "ethers";
 import JSBI from "jsbi";
 
-const isETH = false;
+const chainId = 61;
 
-const chainId = isETH ? 1 : 61;
-
+// https://github.com/etcswap/smart-order-router/blob/etcswap/test/integ/routers/alpha-router/alpha-router.integration.test.ts#L513
 const alphaRouter = new AlphaRouter({
   chainId,
-  provider: new ethers.providers.JsonRpcProvider(
-    isETH ? "https://ethereum-rpc.publicnode.com" : "https://etc.rivet.link"
-  ),
+  provider: new ethers.providers.JsonRpcProvider("https://etc.rivet.link"),
 });
 
 const tokenIn = new Token(
   chainId,
-  isETH
-    ? "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48" // USDC
-    : "0xDE093684c796204224BC081f937aa059D903c52a", // USC
+  "0xDE093684c796204224BC081f937aa059D903c52a", // USC
   6,
-  "TKNIN",
-  "TKNIN"
+  "USC",
+  "USC"
 );
 
-// Add the output token (e.g., WETH)
 const tokenOut = new Token(
   chainId,
-  isETH
-    ? "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2" // WETH
-    : "0x1953cab0E5bFa6D4a9BaD6E05fD46C1CC6527a5a", // WETC
+  "0x1953cab0E5bFa6D4a9BaD6E05fD46C1CC6527a5a", // WETC
   18,
-  "TKNOUT",
-  "TKNOUT"
+  "WETC",
+  "WETC"
 );
 
+// https://github.com/etcswap/smart-order-router/blob/etcswap/src/util/amounts.ts#L14
 function parseAmount(value, currency) {
   const typedValueParsed = parseUnits(value, currency.decimals).toString();
   return CurrencyAmount.fromRawAmount(currency, JSBI.BigInt(typedValueParsed));
 }
 
-const amount = parseAmount("1", tokenIn);
-
+// https://github.com/etcswap/smart-order-router/blob/etcswap/src/routers/alpha-router/config.ts#L67
 const routingConfig = {
   v2PoolSelection: {
     topN: 3,
@@ -67,15 +59,16 @@ const routingConfig = {
   forceCrossProtocol: false,
 };
 
+// https://github.com/etcswap/smart-order-router/blob/etcswap/test/integ/routers/alpha-router/alpha-router.integration.test.ts#L173
 const ROUTING_CONFIG = {
   ...routingConfig,
   protocols: ["V3", "V2"],
 };
 
-main();
-async function main() {
-  const swap = await alphaRouter.route(
-    amount,
+// https://github.com/etcswap/smart-order-router/blob/66d83d254b03b36f6b5459b0f877f267b1682bab/src/routers/alpha-router/alpha-router.ts#L851
+alphaRouter
+  .route(
+    parseAmount("1", tokenIn),
     tokenOut, // Change tokenIn to tokenOut here
     0,
     {
@@ -87,7 +80,10 @@ async function main() {
     {
       ...ROUTING_CONFIG,
     }
-  );
-
-  console.log("-==-=--==-=-", swap);
-}
+  )
+  .then((route) => {
+    console.log("ROUTE", route);
+  })
+  .catch((error) => {
+    console.log("ERROR", error);
+  });
