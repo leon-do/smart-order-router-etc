@@ -9,7 +9,7 @@ node index.js
 
 ## Example Response
 
-```JSON
+```js
 {
   quote: CurrencyAmount {
     numerator: JSBI(2) [ 151029657, 52208410, sign: false ],
