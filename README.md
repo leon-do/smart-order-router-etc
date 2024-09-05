@@ -3,7 +3,7 @@
 ## Install
 
 ```
-npm install
+yarn
 npx tsx swapCallParameters.ts
 npx tsx alphaRouterRoute.ts
 ```

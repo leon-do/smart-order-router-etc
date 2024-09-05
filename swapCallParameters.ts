@@ -1,5 +1,5 @@
-import { SwapRouter } from "@uniswap/router-sdk";
-import { Route as V2Route, Trade as V2Trade } from "@uniswap/v2-sdk";
+import { SwapRouter } from "@_etcswap/router-sdk";
+import { Route as V2Route, Trade as V2Trade, Pair } from "@_etcswap/v2-sdk";
 import {
   Trade as V3Trade,
   Route as V3Route,
@@ -9,15 +9,14 @@ import {
   TickMath,
   TICK_SPACINGS,
   encodeSqrtRatioX96,
-} from "@uniswap/v3-sdk";
-import { Pair } from "@uniswap/v2-sdk";
+} from "@_etcswap/v3-sdk";
 import {
   BigintIsh,
   CurrencyAmount,
   Percent,
   Token,
   TradeType,
-} from "@uniswap/sdk-core";
+} from "@_etcswap/sdk-core";
 import JSBI from "jsbi";
 
 (async () => {
