@@ -1,5 +1,5 @@
 import { AlphaRouter } from "@_etcswap/smart-order-router";
-import { Token, CurrencyAmount, Percent } from "@uniswap/sdk-core";
+import { Token, CurrencyAmount, Percent } from "@_etcswap/sdk-core";
 import { parseUnits } from "@ethersproject/units";
 import ethers from "ethers";
 import JSBI from "jsbi";
